@@ -30,13 +30,13 @@ sudo yum install php-mysqlnd php-mysql php-fpm php-mbstring php-intl php-simplex
 echo -e "\n####### 5. APACHE #############################\n"
 sudo systemctl start httpd
 sudo systemctl enable httpd
-sudo mkdir /var/www/$1/
+sudo mkdir /var/www/$1.local/
 sudo mkdir /var/www/logs/
 sudo chmod -R 777 /etc/httpd/conf.d
-sudo echo -e "<VirtualHost *:80>\n\tServerAdmin tom@$1.test\n\tServerName $1.test\n\tServerAlias www.$1.test\n\tDocumentRoot /var/www/$1\n\tErrorLog /var/www/logs/error.log\n\tCustomLog /var/www/logs/access.log combined\n\t<Directory "/var/www/$1">\n\t\tAllowOverride\n\t\tOrder allow,deny\n\t\tAllow from all\n\t\tRequire all granted\n\t\tAllowOverride All\n\t</Directory>\n</VirtualHost>" >> /etc/httpd/conf.d/000-$1.test.conf
-sudo chmod -R 777 /etc/httpd/conf.d/000-$1.test.conf
-sudo chown root:root /etc/httpd/conf.d/000-$1.test.conf
-sudo echo -e "To Infinity and beyond! Now just add '$(hostname -I)   $1.test' to your hosts file 🚀" >> /var/www/$1/index.html
+sudo echo -e "<VirtualHost *:80>\n\tServerAdmin tom@$1.local\n\tServerName $1.local\n\tServerAlias www.$1.local\n\tDocumentRoot /var/www/$1.local\n\tErrorLog /var/www/logs/error.log\n\tCustomLog /var/www/logs/access.log combined\n\t<Directory "/var/www/$1.local">\n\t\tAllowOverride\n\t\tOrder allow,deny\n\t\tAllow from all\n\t\tRequire all granted\n\t\tAllowOverride All\n\t</Directory>\n</VirtualHost>" >> /etc/httpd/conf.d/000-$1.local.conf
+sudo chmod -R 777 /etc/httpd/conf.d/000-$1.local.conf
+sudo chown root:root /etc/httpd/conf.d/000-$1.local.conf
+sudo echo -e "To Infinity and beyond! Now just add '$(hostname -I)   $1.local' to your hosts file 🚀" >> /var/www/$1.local/index.html
 sudo systemctl restart httpd
 
 echo -e "\n####### 6. COMPOSER #############################\n"
