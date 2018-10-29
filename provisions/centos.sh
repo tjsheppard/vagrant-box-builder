@@ -45,19 +45,31 @@ sudo php composer-setup.php
 sudo php -r "unlink('composer-setup.php');"
 sudo mv composer.phar /usr/local/bin/composer
 
-
 echo -e "\n####### 7. MYSQL ##############################\n"
 sudo curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash
 sudo yum install MariaDB-server -y
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
+mysql_secure_installation <<EOF
+
+y
+vagrant
+vagrant
+y
+y
+y
+y
+y
+EOF
+
+echo -e "\n####### 8. NODE.JS ##############################\n"
+sudo curl -sL https://rpm.nodesource.com/setup_8.x | sudo bash -
+sudo yum install nodejs -y
 
 echo -e "\n$1 was built! Now 'vagrant reload' to restart the box and get ready to develop 🦕\n"
 
-# SECURE DATABASE SETUP
 # CREATE DATABASE
 # XDEBUG
-# NODE
 # SETUP SSL
 
 
