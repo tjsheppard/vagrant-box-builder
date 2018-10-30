@@ -8,6 +8,8 @@ sudo yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
 sudo yum install yum-utils -y
 sudo yum install curl -y
 sudo yum install mod_ssl -y
+sudo yum install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm -y
+sudo yum install git -y
 
 echo -e "\n####### 2. SELINUX ############################\n"
 sudo setenforce 0
