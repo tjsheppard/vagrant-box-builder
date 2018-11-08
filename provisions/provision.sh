@@ -3,10 +3,17 @@ sudo yum update -y
 sudo yum install nano -y
 sudo yum install nmap -y
 sudo yum install curl -y
+sudo yum install epel-release -y
 
 echo -e "\n####### GIT #######################\n"
 sudo yum install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm -y
 sudo yum install git -y
+
+if [ $5 != "" ] || [ $6 != "" ]
+then
+sudo git config --global user.name "$5"
+sudo git config --global user.email $6
+fi
 
 echo -e "\n####### SELINUX ############################\n"
 sudo setenforce 0
@@ -16,6 +23,7 @@ echo -e "\n####### FIREWALL ###########################\n"
 sudo systemctl start firewalld
 sudo systemctl enable firewalld
 sudo firewall-cmd --remove-service=dhcpv6-client --permanent
+sudo firewall-cmd --remove-service=rpcbind --permanent
 sudo firewall-cmd --add-service=http --permanent
 sudo firewall-cmd --add-service=https --permanent
 sudo firewall-cmd --add-service=mysql --permanent
@@ -23,12 +31,29 @@ sudo firewall-cmd --reload
 
 echo -e "\n####### PHP ################################\n"
 sudo yum install epel-release -y
+sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -y
 sudo yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
 sudo yum install yum-utils -y
-sudo yum-config-manager --enable remi-php72
-sudo yum install php -y
 
-#### MODULES #####
+if [ $4 -eq 72 ]
+then
+sudo yum-config-manager --enable remi-php72
+elif [ $4 -eq 71 ]
+then
+sudo yum-config-manager --enable remi-php71
+elif [ $4 -eq 70 ] || [ $4 -eq 7 ]
+then
+sudo yum-config-manager --enable remi-php70
+elif [ $4 -eq 56 ] || [ $4 -eq 5 ]
+then
+sudo yum-config-manager --enable remi-php56
+else
+echo -e "PHP not installed"
+fi
+
+if [ $4 -eq 72 ] || [ $4 -eq 71 ] || [ $4 -eq 70 ] || [ $4 -eq 7 ] || [ $4 -eq 56 ] || [ $4 -eq 5 ]
+then
+sudo yum install php -y
 sudo yum install php-mysqlnd -y
 sudo yum install php-mysql -y
 sudo yum install php-mcrypt -y
@@ -44,24 +69,27 @@ sudo yum install php-xml -y
 sudo yum install php-ctype -y
 sudo yum install php-json -y
 sudo yum install curl -y
+sudo yum install php-devel -y
+sudo yum install php-pear -y
+fi
 
 echo -e "\n####### APACHE #############################\n"
 sudo yum install httpd -y
 sudo systemctl start httpd
 sudo systemctl enable httpd
 sudo yum install mod_ssl -y
-sudo mkdir /var/www/$1.local/
+sudo mkdir /var/www/$1$2/
 sudo mkdir /var/www/logs/
 sudo chmod -R 777 /etc/httpd/conf.d
 
 VHOST="<VirtualHost *:80>
-    ServerAdmin webmaster@$1.local
-    ServerName $1.local
-    ServerAlias www.$1.local
-    DocumentRoot /var/www/$1.local
+    ServerAdmin webmaster@$1$2
+    ServerName $1$2
+    ServerAlias www.$1$2
+    DocumentRoot /var/www/$1$2
     ErrorLog /var/www/logs/error.log
     CustomLog /var/www/logs/access.log combined
-    <Directory '/var/www/$1.local'>
+    <Directory '/var/www/$1$2'>
         Options Indexes FollowSymLinks
         AllowOverride all
         Require all granted
@@ -69,13 +97,13 @@ VHOST="<VirtualHost *:80>
 </VirtualHost>"
 
 VHOSTSSL="<VirtualHost *:443>
-    ServerAdmin webmaster@$1.local
-    ServerName $1.local
-    ServerAlias www.$1.local
-    DocumentRoot /var/www/$1.local
+    ServerAdmin webmaster@$1$2
+    ServerName $1$2
+    ServerAlias www.$1$2
+    DocumentRoot /var/www/$1$2
     ErrorLog /var/www/logs/error-ssl.log
     CustomLog /var/www/logs/access-ssl.log combined
-    <Directory '/var/www/$1.local'>
+    <Directory '/var/www/$1$2'>
         Options Indexes FollowSymLinks
         AllowOverride all
         Require all granted
@@ -85,15 +113,17 @@ VHOSTSSL="<VirtualHost *:443>
     SSLCertificateKeyFile /var/www/ssl/server.key
 </VirtualHost>"
 
-INDEX="To Infinity and beyond! Now just add $(hostname -I) $1.local to your hosts file 🚀"
+INDEX="$(hostname -I) $1$2 🚀 <?php phpinfo() ?>"
 
-echo "$VHOST" | sudo tee /etc/httpd/conf.d/000-$1.local.conf
-echo "$VHOSTSSL" | sudo tee /etc/httpd/conf.d/000-ssl-$1.local.conf
-echo "$INDEX" | sudo tee /var/www/$1.local/index.html
+echo "$VHOST" | sudo tee /etc/httpd/conf.d/000-$1$2.conf
+echo "$VHOSTSSL" | sudo tee /etc/httpd/conf.d/000-ssl-$1$2.conf
+echo "$INDEX" | sudo tee /var/www/$1$2/index.php
 echo "ServerName $1" | sudo tee /etc/httpd/conf.d/servername.conf
 
 sudo chmod -R 777 /etc/httpd/conf.d/
 sudo chown root:root /etc/httpd/conf.d/
+
+rm -rf /var/www/cgi-bin
 
 
 echo -e "\n####### COMPOSER #############################\n"
@@ -147,7 +177,7 @@ L=$1
 O=$1
 OU=$1
 emailAddress=$1@email.com
-CN = $1.local"
+CN = $1$2"
 
 V3EXT="authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
@@ -155,7 +185,7 @@ keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1 = $1.local"
+DNS.1 = $1$2"
 
 echo "$SERVERCSRCNF" | sudo tee server.csr.cnf
 echo "$V3EXT" | sudo tee v3.ext
@@ -168,7 +198,17 @@ openssl req -new -sha256 -nodes -out server.csr -newkey rsa:2048 -keyout server.
 
 openssl x509 -req -in server.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out server.crt -passin pass:$1 -days 500 -sha256 -extfile v3.ext
 
-# XDEBUG
+echo -e "\n####### XDEBUG ##############################\n"
+sudo yum install gcc gcc-c++ autoconf automake
+sudo pecl install Xdebug
+
+XDEBUG="[xdebug]
+zend_extension='/usr/lib64/php/modules/xdebug.so'
+xdebug.remote_enable = 1"
+
+echo "$XDEBUG" | sudo tee /etc/php.d/xdebug.ini
+
+sudo chmod -R 777 /etc/php.d/xdebug.ini
 
 # sudo chmod -R 777 /etc/profile.d/
 
