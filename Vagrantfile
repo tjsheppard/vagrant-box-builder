@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
     #######################################
     box.vm.box = os
     box.vm.hostname = name
-    box.vm.synced_folder name + "/", "/var/www/",  owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
+    box.vm.synced_folder "../" + name + "/", "/var/www/",  owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
     box.vm.provision "shell", path: "provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail]
     box.vm.provision "shell", path: "boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail], run: "always"
     box.vm.provider "virtualbox" do |virtualbox|
@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
     #######################################
     box.vm.box = os
     box.vm.hostname = name
-    box.vm.synced_folder name + "/", "/var/www/",  owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
+    box.vm.synced_folder "../" + name + "/", "/var/www/",  owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
     box.vm.provision "shell", path: "provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail]
     box.vm.provision "shell", path: "boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail], run: "always"
     box.vm.provider "virtualbox" do |virtualbox|
@@ -73,7 +73,7 @@ Vagrant.configure("2") do |config|
     php = 70
     box.vm.box = os
     box.vm.hostname = name
-    box.vm.synced_folder name + "/", "/var/www/",  owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
+    box.vm.synced_folder "../" + name + "/", "/var/www/",  owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
     box.vm.provision "shell", path: "provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail]
     box.vm.provision "shell", path: "boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail], run: "always"
     box.vm.provider "virtualbox" do |virtualbox|
