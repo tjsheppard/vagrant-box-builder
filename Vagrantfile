@@ -3,7 +3,6 @@ Vagrant.configure("2") do |config|
   config.vm.usable_port_range = 8000..8999
   config.vm.network "forwarded_port", guest: 80, host: 8000, id: 'http', auto_correct: true
   config.vm.network "forwarded_port", guest: 443, host: 8001, id: 'https', auto_correct: true
-  config.vm.network "forwarded_port", guest: 3306, host: 8002, id: 'mysql',auto_correct: true
   config.ssh.insert_key = false
 
   config.vm.define "dinosaurs" do |box|
@@ -18,8 +17,8 @@ Vagrant.configure("2") do |config|
     box.vm.box = os
     box.vm.hostname = name
     box.vm.synced_folder name + "/", "/var/www/",  owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
-    box.vm.provision "shell", path: "provisions/provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail]
-    box.vm.provision "shell", path: "provisions/boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail], run: "always"
+    box.vm.provision "shell", path: "provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail]
+    box.vm.provision "shell", path: "boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail], run: "always"
     box.vm.provider "virtualbox" do |virtualbox|
       virtualbox.name = name
     end
@@ -37,8 +36,8 @@ Vagrant.configure("2") do |config|
     box.vm.box = os
     box.vm.hostname = name
     box.vm.synced_folder name + "/", "/var/www/",  owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
-    box.vm.provision "shell", path: "provisions/provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail]
-    box.vm.provision "shell", path: "provisions/boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail], run: "always"
+    box.vm.provision "shell", path: "provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail]
+    box.vm.provision "shell", path: "boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail], run: "always"
     box.vm.provider "virtualbox" do |virtualbox|
       virtualbox.name = name
     end
@@ -55,9 +54,9 @@ Vagrant.configure("2") do |config|
     #######################################
     box.vm.box = os
     box.vm.hostname = name
-    box.vm.synced_folder name + "/", "/var/www/",  owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
-    # box.vm.provision "shell", path: "provisions/provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail]
-    # box.vm.provision "shell", path: "provisions/boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail], run: "always"
+    box.vm.synced_folder "../" + name + "/", "/var/www/", owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
+    box.vm.provision "shell", path: "provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail]
+    box.vm.provision "shell", path: "boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail], run: "always"
     box.vm.provider "virtualbox" do |virtualbox|
       virtualbox.name = name
     end
@@ -75,8 +74,8 @@ Vagrant.configure("2") do |config|
     box.vm.box = os
     box.vm.hostname = name
     box.vm.synced_folder name + "/", "/var/www/",  owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
-    box.vm.provision "shell", path: "provisions/provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail]
-    box.vm.provision "shell", path: "provisions/boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail], run: "always"
+    box.vm.provision "shell", path: "provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail]
+    box.vm.provision "shell", path: "boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail], run: "always"
     box.vm.provider "virtualbox" do |virtualbox|
       virtualbox.name = name
     end
