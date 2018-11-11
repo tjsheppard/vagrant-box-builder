@@ -36,7 +36,7 @@ The fields inbetween the hashes can be configured to make your desired box.
 
 The table below gives you guidance on how you can configure these settings.
 
-[Guide](https://www.notion.so/f53325d6b10f479882eba91e2005a6ab)
+[Guide](./Guide-07f4bb12-8e93-483e-9a90-7fb62573e2ee.csv)
 
 ## Multiple boxes
 

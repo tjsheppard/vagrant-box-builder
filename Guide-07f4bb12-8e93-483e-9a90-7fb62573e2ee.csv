@@ -1,0 +1,8 @@
+﻿Name,Description,Example,Required,Supported
+name,"The name of your project. The site will be based off this name ",dogs,Yes,
+ext,This is the extension you want your site to have.,.woof,Yes,
+os,"Two operating systems are supported, ubuntu and centos.",ubuntu,Yes,"centos/7,ubuntu/bionic64"
+php,This will download the PHP version you want and get most of the modules you will need.,72,No,"56,70,71,72"
+gituser,Define the global git user so you can get on with development straight away.,tjsheppard,No,
+gitemail,This includes the email for your account too.,tjsheppard@email.com,No,
+subdomain,If you want your site to have a subdomain then here we are.,www.,No,
