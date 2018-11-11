@@ -24,11 +24,11 @@ Install *VirtualBox, Vagrant* and *vbguest*.
 
 To create a new project, create a folder with the name of your project in the same directory as the *vagrant-web-dev-starter-kit*.
 
-![](Screenshot2018-11-11at15-8b786c4c-0c46-4dce-9de5-2c246ea9225d.02.07.png)
+![](README/screenshot1.png)
 
 In the example above I have created a project called *dinosaurs*. Dinosaurs are cool 🦕
 
-![](Screenshot2018-11-11at15-62433ef6-de85-449d-9699-60b9142406e1.30.21.png)
+![](README/screenshot2.png)
 
 Open up the Vagrantfile and you'll see the dinosaurs project is already refined.
 
@@ -36,7 +36,7 @@ The fields inbetween the hashes can be configured to make your desired box.
 
 The table below gives you guidance on how you can configure these settings.
 
-[Guide](./Guide-07f4bb12-8e93-483e-9a90-7fb62573e2ee.csv)
+[Guide](README/guide.csv)
 
 ## Multiple boxes
 
