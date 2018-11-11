@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
     os = "centos/7"
     php = 72
     gituser = "Tom Sheppard"
-    gitemail = "sheppardnexus@gmail.com"
+    gitemail = "tomsheppard@email.com"
     subdomain = "jurassic"
     #######################################
     box.vm.box = os
@@ -25,25 +25,9 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "homo-sapiens" do |box|
-    #######################################
-    name = "homo-sapiens"
-    ext = "earth"
-    os = "centos/7"
-    php = 56
-    gituser = "Tom Sheppard"
-    gitemail = "sheppardnexus@gmail.com"
-    subdomain = "history"
-    #######################################
-    box.vm.box = os
-    box.vm.hostname = name
-    box.vm.synced_folder "../" + name + "/", "/var/www/",  owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
-    box.vm.provision "shell", path: "provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail, subdomain]
-    box.vm.provision "shell", path: "boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail, subdomain], run: "always"
-    box.vm.provider "virtualbox" do |virtualbox|
-      virtualbox.name = name
-    end
-  end
+
+
+
 
   config.vm.define "atheneum" do |box|
     #######################################
@@ -58,26 +42,6 @@ Vagrant.configure("2") do |config|
     box.vm.box = os
     box.vm.hostname = name
     box.vm.synced_folder "../" + name + "/", "/var/www/", owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
-    box.vm.provision "shell", path: "provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail, subdomain]
-    box.vm.provision "shell", path: "boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail, subdomain], run: "always"
-    box.vm.provider "virtualbox" do |virtualbox|
-      virtualbox.name = name
-    end
-  end
-
-  config.vm.define "centos" do |box|
-    #######################################
-    name = "centos"
-    ext = "local"
-    os = "centos/7"
-    php = 70
-    gituser = "Tom Sheppard"
-    gitemail = "sheppardnexus@gmail.com"
-    subdomain = "testig"
-    #######################################
-    box.vm.box = os
-    box.vm.hostname = name
-    box.vm.synced_folder "../" + name + "/", "/var/www/",  owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
     box.vm.provision "shell", path: "provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail, subdomain]
     box.vm.provision "shell", path: "boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail, subdomain], run: "always"
     box.vm.provider "virtualbox" do |virtualbox|
