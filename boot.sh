@@ -1,31 +1,11 @@
-# sudo systemctl start firewalld
-# sudo systemctl start httpd
-# sudo systemctl start mariadb
-# sudo yum update -y
-
-RED="\e[31m"
-ORANGE="\e[33m"
-BLUE="\e[94m"
-GREEN="\e[92m"
-STOP="\e[0m"
-LINE="##########################################################################################"
-
-printf "${GREEN}"
-echo "$LINE"
-printf "${STOP}"
-printf "${BLUE}"
-figlet -f slant "$1"
-printf "${STOP}"
-printf "${GREEN}"
-echo "$LINE"
-printf "${STOP}"
-
-echo -e "$2"
-
-echo -e "$3"
-
-echo -e "$4"
-
-echo -e "$5"
-
-echo -e "$6"
+if [ "$3" = "ubuntu/bionic64" ]; then
+    echo -e "Dependencies setup"
+    sudo service apache2 restart
+elif [ "$3" = "centos/7" ]; then
+    sudo systemctl restart firewalld
+    sudo systemctl restart httpd
+    sudo systemctl restart mariadb
+    sudo yum update -y
+else
+    echo -e "OS did not match the boot script"
+fi

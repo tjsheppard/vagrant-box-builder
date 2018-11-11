@@ -12,7 +12,7 @@ elif [ "$3" = "centos/7" ]; then
     sudo yum install epel-release -y
     sudo yum install figlet -y
 else
-    echo -e "no dependencis"
+    echo -e "------- SKIPPED -------"
 fi
 
 
@@ -28,7 +28,7 @@ elif [ "$3" = "centos/7" ]; then
         sudo git config --global user.email $6
     fi
 else
-    echo -e "no git"
+    echo -e "------- SKIPPED -------"
 fi
 
 
@@ -38,7 +38,7 @@ if [ "$3" = "centos/7" ]; then
     sudo setenforce 0
     sudo sed -i 's/enforcing/disabled/g' /etc/selinux/config
 else
-    echo -e "------- SKIPPED"
+    echo -e "------- SKIPPED -------"
 fi
 
 
@@ -55,14 +55,13 @@ elif [ "$3" = "centos/7" ]; then
     sudo firewall-cmd --add-service=mysql --permanent
     sudo firewall-cmd --reload
 else
-    echo -e "no git"
+    echo -e "------- SKIPPED -------"
 fi
 
 echo -e "\n####### PHP ################################\n"
 if [ "$3" = "ubuntu/bionic64" ]; then
     echo -e "php setup"
 elif [ "$3" = "centos/7" ]; then
-    sudo yum install epel-release -y
     sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -y
     sudo yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
     sudo yum install yum-utils -y
@@ -76,7 +75,7 @@ elif [ "$3" = "centos/7" ]; then
     elif [ $4 -eq 56 ] || [ $4 -eq 5 ]; then
         sudo yum-config-manager --enable remi-php56
     else
-        echo -e "PHP not installed"
+        echo -e "------- SKIPPED -------"
     fi
 
     if [ $4 -eq 72 ] || [ $4 -eq 71 ] || [ $4 -eq 70 ] || [ $4 -eq 7 ] || [ $4 -eq 56 ] || [ $4 -eq 5 ]; then
@@ -100,7 +99,7 @@ elif [ "$3" = "centos/7" ]; then
         sudo yum install php-pear -y
     fi
 else
-    echo -e "no php"
+    echo -e "------- SKIPPED -------"
 fi
 
 echo -e "\n####### APACHE #############################\n"
@@ -156,7 +155,7 @@ elif [ "$3" = "centos/7" ]; then
     sudo chown root:root /etc/httpd/conf.d/
     rm -rf /var/www/cgi-bin
 else
-    echo -e "no apache"
+    echo -e "------- SKIPPED -------"
 fi
 
 echo -e "\n####### COMPOSER #############################\n"
@@ -168,7 +167,7 @@ elif [ "$3" = "centos/7" ]; then
     sudo php -r "unlink('composer-setup.php');"
     sudo mv composer.phar /usr/local/bin/composer
 else
-    echo -e "no composer"
+    echo -e "------- SKIPPED -------"
 fi
 
 echo -e "\n####### MYSQL ##############################\n"
@@ -197,7 +196,7 @@ EOF
     FLUSH PRIVILEGES;
 MYSQL_SCRIPT
 else
-    echo -e "no mysql"
+    echo -e "------- SKIPPED -------"
 fi
 
 echo -e "\n####### NODE.JS ##############################\n"
@@ -207,7 +206,7 @@ elif [ "$3" = "centos/7" ]; then
     sudo curl -sL https://rpm.nodesource.com/setup_8.x | sudo bash -
     sudo yum install nodejs -y
 else
-    echo -e "no node"
+    echo -e "------- SKIPPED -------"
 fi
 
 
@@ -265,17 +264,94 @@ echo -e "\n####### XDEBUG ##############################\n"
         echo "$XDEBUG" | sudo tee /etc/php.d/xdebug.ini
         sudo chmod -R 777 /etc/php.d/xdebug.ini
     else
-        echo -e "no xdebug"
+        echo -e "------- SKIPPED -------"
     fi
 
-# sudo chmod -R 777 /etc/profile.d/
+# Regular Colors
+black="\e[0;30m"
+red="\e[0;31m"
+green="\e[0;32m"
+yellow="\e[0;33m"
+blue="\e[0;34m"
+purple="\e[0;35m"
+cyan="\e[0;36m"
+white="\e[0;37m"
 
-# MESSAGE="
-# ===============================================
-#  - Project/Hostname........: $(uname -n)
-#  - Internet Protocol.......: $(hostname -I)
-# ==============================================="
+# Bold
+bBlack="\e[1;30m"
+bRed="\e[1;31m"
+bGreen="\e[1;32m"
+bYellow="\e[1;33m"
+bBlue="\e[1;34m"
+bPurple="\e[1;35m"
+bCyan="\e[1;36m"
+bWhite="\e[1;37m"
 
-# echo "$MESSAGE" | sudo tee /etc/profile.d/message.sh
+# Underline
+uBlack="\e[4;30m"
+uRed="\e[4;31m"
+uGreen="\e[4;32m"
+uYellow="\e[4;33m"
+uBlue="\e[4;34m"
+uPurple="\e[4;35m"
+uCyan="\e[4;36m"
+uWhite="\e[4;37m"
 
-# sudo chmod -R 777 /etc/profile.d/message.sh
+# Background
+fBlack="\e[40m"
+fRed="\e[41m"
+fGreen="\e[42m"
+fYellow="\e[43m"
+fBlue="\e[44m"
+fPurple="\e[45m"
+fCyan="\e[46m"
+fWhite="\e[47m"
+
+# High Intensty
+hBlack="\e[0;90m"
+hRed="\e[0;91m"
+hGreen="\e[0;92m"
+hYellow="\e[0;93m"
+hBlue="\e[0;94m"
+hPurple="\e[0;95m"
+hCyan="\e[0;96m"
+hWhite="\e[0;97m"
+
+# Bold High Intensty
+bhBlack="\e[1;90m"
+bhRed="\e[1;91m"
+bhGreen="\e[1;92m"
+bhYellow="\e[1;93m"
+bhBlue="\e[1;94m"
+bhPurple="\e[1;95m"
+bhCyan="\e[1;96m"
+bhWhite="\e[1;97m"
+
+# High Intensty backgrounds
+bhfBlack="\e[0;100m"
+bhfRed="\e[0;101m"
+bhfGreen="\e[0;102m"
+bhfYellow="\e[0;103m"
+bhfBlue="\e[0;104m"
+bhfPurple="\e[0;105m"
+bhfCyan="\e[0;106m"
+bhfWhite="\e[0;107m"
+
+reset="\e[0m"
+
+message="printf "$green"
+figlet -f slant \"$1\"
+printf "$reset"
+
+echo -e \"$green###################################################$reset\n"
+
+echo -e \"$green SITE.................:$reset $black $fGreen $1$2 $fBlack $reset\"
+echo -e \"$green OS...................:$reset $black $fGreen $3 $fBlack $reset\"
+echo -e \"$green PHP VERSION..........:$reset $black $fGreen $4 $fBlack $reset\"
+echo -e \"$green GIT USER.............:$reset $black $fGreen $5 $fBlack $reset\"
+echo -e \"$green GIT EMAIL............:$reset $black $fGreen $6 $fBlack $reset\"
+echo -e \"$green IP ADDRESS...........:$reset $black $fGreen $(hostname -I) $fBlack $reset\""
+
+echo "$message" | sudo tee /var/www/info.sh
+sudo chmod -R 777 /etc/profile.d/
+sudo ln -s /var/www/info.sh /etc/profile.d/info.sh
