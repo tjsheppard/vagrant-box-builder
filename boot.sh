@@ -7,5 +7,5 @@ elif [ "$3" = "centos/7" ]; then
     sudo systemctl restart mariadb
     sudo yum update -y
 else
-    echo -e "OS did not match the boot script"
+    echo -e "------- SKIPPED -------"
 fi

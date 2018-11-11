@@ -105,13 +105,14 @@ fi
 echo -e "\n####### APACHE #############################\n"
 
 VHOST="<VirtualHost *:80>
-    ServerAdmin webmaster@$1$2
-    ServerName $1$2
-    ServerAlias www.$1$2
-    DocumentRoot /var/www/$1$2
+    ServerName $1.$2
+    DocumentRoot /var/www/$1.$2
+    ServerAlias $(if [ \"$7\" != \"\" ]; then 
+                    echo $7.$1.$2
+                fi)
     ErrorLog /var/www/logs/error.log
     CustomLog /var/www/logs/access.log combined
-    <Directory '/var/www/$1$2'>
+    <Directory '/var/www/$1.$2'>
         Options Indexes FollowSymLinks
         AllowOverride all
         Require all granted
@@ -119,13 +120,14 @@ VHOST="<VirtualHost *:80>
 </VirtualHost>"
 
 VHOSTSSL="<VirtualHost *:443>
-    ServerAdmin webmaster@$1$2
-    ServerName $1$2
-    ServerAlias www.$1$2
-    DocumentRoot /var/www/$1$2
+    ServerName $1.$2
+    ServerAlias $(if [ \"$7\" != \"\" ]; then 
+                    echo $7.$1.$2
+                fi)
+    DocumentRoot /var/www/$1.$2
     ErrorLog /var/www/logs/error-ssl.log
     CustomLog /var/www/logs/access-ssl.log combined
-    <Directory '/var/www/$1$2'>
+    <Directory '/var/www/$1.$2'>
         Options Indexes FollowSymLinks
         AllowOverride all
         Require all granted
@@ -135,7 +137,7 @@ VHOSTSSL="<VirtualHost *:443>
     SSLCertificateKeyFile /var/www/ssl/server.key
 </VirtualHost>"
 
-INDEX="$(hostname -I) $1$2 🚀 <?php phpinfo() ?>"
+INDEX="$(hostname -I) $1.$2 🚀 <?php phpinfo() ?>"
 
 if [ "$3" = "ubuntu/bionic64" ]; then
     echo -e "apache setup"
@@ -144,12 +146,12 @@ elif [ "$3" = "centos/7" ]; then
     sudo systemctl start httpd
     sudo systemctl enable httpd
     sudo yum install mod_ssl -y
-    sudo mkdir /var/www/$1$2/
+    sudo mkdir /var/www/$1.$2/
     sudo mkdir /var/www/logs/
     sudo chmod -R 777 /etc/httpd/conf.d
-    echo "$VHOST" | sudo tee /etc/httpd/conf.d/000-$1$2.conf
-    echo "$VHOSTSSL" | sudo tee /etc/httpd/conf.d/000-ssl-$1$2.conf
-    echo "$INDEX" | sudo tee /var/www/$1$2/index.php
+    echo "$VHOST" | sudo tee /etc/httpd/conf.d/000-$1.$2.conf
+    echo "$VHOSTSSL" | sudo tee /etc/httpd/conf.d/000-ssl-$1.$2.conf
+    echo "$INDEX" | sudo tee /var/www/$1.$2/index.php
     echo "ServerName $1" | sudo tee /etc/httpd/conf.d/servername.conf
     sudo chmod -R 777 /etc/httpd/conf.d/
     sudo chown root:root /etc/httpd/conf.d/
@@ -228,7 +230,7 @@ L=$1
 O=$1
 OU=$1
 emailAddress=$1@email.com
-CN = $1$2"
+CN = $1.$2"
 
 V3EXT="authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
@@ -236,7 +238,10 @@ keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1 = $1$2"
+DNS.1 = $1.$2
+$(if [ \"$7\" != \"\" ]; then 
+    echo DNS.2 = $7.$1.$2
+fi)"
 
 echo "$SERVERCSRCNF" | sudo tee server.csr.cnf
 echo "$V3EXT" | sudo tee v3.ext
@@ -339,13 +344,16 @@ bhfWhite="\e[0;107m"
 
 reset="\e[0m"
 
-message="printf "$green"
+message="printf \"$green\"
 figlet -f slant \"$1\"
-printf "$reset"
+printf \"$reset\"
 
-echo -e \"$green###################################################$reset\n"
+echo -e \"$green###################################################$reset\n\"
 
-echo -e \"$green SITE.................:$reset $black $fGreen $1$2 $fBlack $reset\"
+echo -e \"$green NAME.................:$reset $black $fGreen $1.$2 $fBlack $reset\"
+if [ \"$7\" != \"\" ]; then 
+    echo -e \"$green ALIAS................:$reset $black $fGreen $7.$1.$2 $fBlack $reset\"
+fi
 echo -e \"$green OS...................:$reset $black $fGreen $3 $fBlack $reset\"
 echo -e \"$green PHP VERSION..........:$reset $black $fGreen $4 $fBlack $reset\"
 echo -e \"$green GIT USER.............:$reset $black $fGreen $5 $fBlack $reset\"
