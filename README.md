@@ -1,10 +1,9 @@
-# Vagrant Web Dev Starter Kit
+# Vagrant Web Dev Starter Kit 🦄
 
 Vagrant can be a bit confusing at first so this Starter Kit will help you create a quick and easy development environment setup for your unique project.
+Supports: Windows, MacOS, Ubuntu
 
 # Installation 💽
-
----
 
 Install *VirtualBox, Vagrant* and *vbguest*.
 
@@ -19,8 +18,6 @@ Install *VirtualBox, Vagrant* and *vbguest*.
     vagrant plugin install vagrant-vbguest
 
 # Setup 📦
-
----
 
 To create a new project, create a folder with the name of your project in the same directory as the *vagrant-web-dev-starter-kit*.
 
@@ -68,7 +65,7 @@ Once the machine is finished it is recommended you do a `vagrant reload`.
 
 The reason for this is for SElinux to be completed disabled it needs to switch off. Plus it's a good test to make sure everything boots up properly when you shut the box down.
 
-# 3. Your machine 🔐
+# Your machine 🔐
 
 vagrant ssh - you should see an imformative message when booting up your box telling you the ip and it's name. Lovely.
 
@@ -79,10 +76,15 @@ On your mac go to the hosts file and add your ip address with the our local dns
     123.4.5.6     dinosaurs.local
     123.4.5.6     www.dinosaurs.local
 
-Great but if you go to the sites httpd connection you'll see this
+Great but if you go to the sites httpd connection you'll see this:
 
-Next you need to add the PEM file to your keychain so 
+insert image of site not secure.
 
-# 4. Complete 🌈
+To fix this you need to open up Keychain Access and import the rootCA.pem file generated in your project folder into the systems category.
+Once done double click the certificate and change to 'Always trust'. You will be prompted for your password and then try reloading your webpage.
+
+
+
+# Complete 🌈
 
 Blah blah stuff will go here
