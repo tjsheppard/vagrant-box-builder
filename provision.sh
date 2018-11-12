@@ -10,6 +10,7 @@ if [ "$3" = "ubuntu/bionic64" ]; then
     sudo apt-get install -y vim
     sudo apt-get install -y ifupdown
     sudo apt-get install -y figlet
+    sudo apt-get install -y wget
 elif [ "$3" = "centos/7" ]; then
     sudo yum update -y
     sudo yum install nano -y
@@ -17,6 +18,7 @@ elif [ "$3" = "centos/7" ]; then
     sudo yum install curl -y
     sudo yum install epel-release -y
     sudo yum install figlet -y
+    sudo yum install wget -y
 else
     echo -e "------- SKIPPED -------"
 fi
@@ -85,11 +87,13 @@ elif [ "$3" = "centos/7" ]; then
         sudo yum-config-manager --enable remi-php70
     elif [ $4 -eq 56 ] || [ $4 -eq 5 ]; then
         sudo yum-config-manager --enable remi-php56
+    elif [ $4 -eq 54 ]; then
+        echo -e "Hmmmm... okay but you should probably update to a higher version soon."
     else
         echo -e "------- SKIPPED -------"
     fi
 
-    if [ $4 -eq 72 ] || [ $4 -eq 71 ] || [ $4 -eq 70 ] || [ $4 -eq 7 ] || [ $4 -eq 56 ] || [ $4 -eq 5 ]; then
+    if [ $4 -eq 72 ] || [ $4 -eq 71 ] || [ $4 -eq 70 ] || [ $4 -eq 7 ] || [ $4 -eq 56 ] || [ $4 -eq 54 ] || [ $4 -eq 5 ]; then
         sudo yum install php -y
         sudo yum install php-mysqlnd -y
         sudo yum install php-mysql -y
@@ -179,6 +183,7 @@ fi
 
 echo -e "\n####### COMPOSER #############################\n"
 if [ "$3" = "ubuntu/bionic64" ]; then
+    echo -e "------- SKIPPED -------"
 elif [ "$3" = "centos/7" ]; then
     sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     sudo php composer-setup.php
@@ -360,21 +365,21 @@ bhfWhite="\e[0;107m"
 
 reset="\e[0m"
 
-message="printf \"$green\"
+message="printf \"$cyan\"
 figlet -f slant \"$1\"
 printf \"$reset\"
 
-echo -e \"$green###################################################$reset\n\"
+echo -e \"$cyan###################################################$reset\n\"
 
-echo -e \"$green NAME.................:$reset $black $fGreen $1.$2 $fBlack $reset\"
+echo -e \"$cyan NAME.................:$reset $black $fCyan $1.$2 $fBlack $reset\"
 if [ \"$7\" != \"\" ]; then 
-    echo -e \"$green ALIAS................:$reset $black $fGreen $7.$1.$2 $fBlack $reset\"
+    echo -e \"$cyan ALIAS................:$reset $black $fCyan $7.$1.$2 $fBlack $reset\"
 fi
-echo -e \"$green OS...................:$reset $black $fGreen $3 $fBlack $reset\"
-echo -e \"$green PHP VERSION..........:$reset $black $fGreen $4 $fBlack $reset\"
-echo -e \"$green GIT USER.............:$reset $black $fGreen $5 $fBlack $reset\"
-echo -e \"$green GIT EMAIL............:$reset $black $fGreen $6 $fBlack $reset\"
-echo -e \"$green IP ADDRESS...........:$reset $black $fGreen $(hostname -I) $fBlack $reset\""
+echo -e \"$cyan OS...................:$reset $black $fCyan $3 $fBlack $reset\"
+echo -e \"$cyan PHP VERSION..........:$reset $black $fCyan $4 $fBlack $reset\"
+echo -e \"$cyan GIT USER.............:$reset $black $fCyan $5 $fBlack $reset\"
+echo -e \"$cyan GIT EMAIL............:$reset $black $fCyan $6 $fBlack $reset\"
+echo -e \"$cyan IP ADDRESS...........:$reset $black $fCyan $(hostname -I) $fBlack $reset\""
 
 echo "$message" | sudo tee /var/www/info.sh
 sudo chmod -R 777 /etc/profile.d/
