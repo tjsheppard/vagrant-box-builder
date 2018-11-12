@@ -25,25 +25,25 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # config.vm.define "centos" do |box|
-  #   #######################################
-  #   name = "centos"
-  #   ext = "books"
-  #   os = "ubuntu/bionic64"
-  #   php = 72
-  #   gituser = "Tom Sheppard"
-  #   gitemail = "tomsheppard@email.com"
-  #   subdomain = "www"
-  #   #######################################
-  #   box.vm.box = os
-  #   box.vm.hostname = name
-  #   box.vm.synced_folder "../" + name + "/", "/var/www/", owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
-  #   box.vm.provision "shell", path: "provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail, subdomain]
-  #   box.vm.provision "shell", path: "boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail, subdomain], run: "always"
-  #   box.vm.provider "virtualbox" do |virtualbox|
-  #     virtualbox.name = name
-  #   end
-  # end
+  config.vm.define "centos" do |box|
+    #######################################
+    name = "centos"
+    ext = "local"
+    os = "centos/7"
+    php = 72
+    gituser = "Tom Sheppard"
+    gitemail = "tomsheppard@email.com"
+    subdomain = "www"
+    #######################################
+    box.vm.box = os
+    box.vm.hostname = name
+    box.vm.synced_folder "../" + name + "/", "/var/www/", owner: "root", group: "root", mount_options: ["dmode=777", "fmode=666"]
+    box.vm.provision "shell", path: "provision.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail, subdomain]
+    box.vm.provision "shell", path: "boot.sh", privileged: false, :args => [name, ext, os, php, gituser, gitemail, subdomain], run: "always"
+    box.vm.provider "virtualbox" do |virtualbox|
+      virtualbox.name = name
+    end
+  end
 
     # config.vm.define "" do |box|
   #   #######################################

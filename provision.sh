@@ -2,8 +2,14 @@ echo -e "\n####### DEPENDENCIES #######################\n"
 if [ "$3" = "ubuntu/bionic64" ]; then
     echo -e "Dependencies setup"
     sudo apt-get update -y
-    sudo apt-get upgrade -y
-    sudo apt-get install figlet -y
+    sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
+    sudo apt-get install -y build-essential
+    sudo apt-get install -y tcl
+    sudo apt-get install -y software-properties-common
+    sudo apt-get install -y python-software-properties
+    sudo apt-get install -y vim
+    sudo apt-get install -y ifupdown
+    sudo apt-get install -y figlet
 elif [ "$3" = "centos/7" ]; then
     sudo yum update -y
     sudo yum install nano -y
@@ -19,7 +25,9 @@ fi
 
 echo -e "\n####### GIT #######################\n"
 if [ "$3" = "ubuntu/bionic64" ]; then
-    echo -e "Git setup"
+    sudo apt-get -y install git
+    sudo git config --global user.name "$5"
+    sudo git config --global user.email $6
 elif [ "$3" = "centos/7" ]; then
     sudo yum install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm -y
     sudo yum install git -y
@@ -60,7 +68,10 @@ fi
 
 echo -e "\n####### PHP ################################\n"
 if [ "$3" = "ubuntu/bionic64" ]; then
-    echo -e "php setup"
+    sudo add-apt-repository -y ppa:ondrej/php
+    sudo apt-get update
+    sudo apt-get install -y php7.2
+    sudo apt-get -y install libapache2-mod-php
 elif [ "$3" = "centos/7" ]; then
     sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -y
     sudo yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
@@ -140,7 +151,13 @@ VHOSTSSL="<VirtualHost *:443>
 INDEX="$(hostname -I) $1.$2 🚀 <?php phpinfo() ?>"
 
 if [ "$3" = "ubuntu/bionic64" ]; then
-    echo -e "apache setup"
+    sudo add-apt-repository -y ppa:ondrej/apache2
+    sudo apt-get update
+    sudo apt-get -y install apache2
+    sudo a2enmod expires
+    sudo a2enmod headers
+    sudo a2enmod include
+    sudo a2enmod rewrite
 elif [ "$3" = "centos/7" ]; then
     sudo yum install httpd -y
     sudo systemctl start httpd
@@ -162,7 +179,6 @@ fi
 
 echo -e "\n####### COMPOSER #############################\n"
 if [ "$3" = "ubuntu/bionic64" ]; then
-    echo -e "composer setup"
 elif [ "$3" = "centos/7" ]; then
     sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     sudo php composer-setup.php
