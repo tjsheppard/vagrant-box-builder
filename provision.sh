@@ -72,8 +72,23 @@ echo -e "\n####### PHP ################################\n"
 if [ "$3" = "ubuntu/bionic64" ]; then
     sudo add-apt-repository -y ppa:ondrej/php
     sudo apt-get update
-    sudo apt-get install -y php7.2
-    sudo apt-get -y install libapache2-mod-php
+
+    if [ $4 -eq 72 ]; then
+        sudo apt-get install -y php7.2
+        sudo apt-get -y install libapache2-mod-php
+    elif [ $4 -eq 71 ]; then
+        sudo apt-get install -y php7.1
+        sudo apt-get -y install libapache2-mod-php
+    elif [ $4 -eq 70 ] || [ $4 -eq 7 ]; then
+        sudo apt-get install -y php7.0
+        sudo apt-get -y install libapache2-mod-php
+    elif [ $4 -eq 56 ] || [ $4 -eq 5 ]; then
+        sudo apt-get install -y php5.6
+        sudo apt-get -y install libapache2-mod-php
+    else
+        echo -e "------- SKIPPED -------"
+    fi
+    
 elif [ "$3" = "centos/7" ]; then
     sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -y
     sudo yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
@@ -81,20 +96,23 @@ elif [ "$3" = "centos/7" ]; then
 
     if [ $4 -eq 72 ]; then
         sudo yum-config-manager --enable remi-php72
+        sudo yum install php -y
     elif [ $4 -eq 71 ]; then
         sudo yum-config-manager --enable remi-php71
+        sudo yum install php -y
     elif [ $4 -eq 70 ] || [ $4 -eq 7 ]; then
         sudo yum-config-manager --enable remi-php70
+        sudo yum install php -y
     elif [ $4 -eq 56 ] || [ $4 -eq 5 ]; then
         sudo yum-config-manager --enable remi-php56
+        sudo yum install php -y
     elif [ $4 -eq 54 ]; then
-        echo -e "Hmmmm... okay but you should probably update to a higher version soon."
+        sudo yum install php -y
     else
         echo -e "------- SKIPPED -------"
     fi
 
     if [ $4 -eq 72 ] || [ $4 -eq 71 ] || [ $4 -eq 70 ] || [ $4 -eq 7 ] || [ $4 -eq 56 ] || [ $4 -eq 54 ] || [ $4 -eq 5 ]; then
-        sudo yum install php -y
         sudo yum install php-mysqlnd -y
         sudo yum install php-mysql -y
         sudo yum install php-mcrypt -y
@@ -162,6 +180,16 @@ if [ "$3" = "ubuntu/bionic64" ]; then
     sudo a2enmod headers
     sudo a2enmod include
     sudo a2enmod rewrite
+    sudo mkdir /var/www/$1.$2/
+    sudo mkdir /var/www/logs/
+    sudo chmod -R 777 /etc/apache2/sites-available/
+    echo "$VHOST" | sudo tee /etc/apache2/sites-available/000-$1.$2.conf
+    echo "$VHOSTSSL" | sudo tee /etc/apache2/sites-available/000-ssl-$1.$2.conf
+    echo "$INDEX" | sudo tee /var/www/$1.$2/index.php
+    echo "ServerName $1" | sudo tee /etc/apache2/sites-available/servername.conf
+    sudo chmod -R 777 /etc/apache2/sites-available/
+    sudo chown root:root /etc/apache2/sites-available/
+    rm -rf /var/www/cgi-bin
 elif [ "$3" = "centos/7" ]; then
     sudo yum install httpd -y
     sudo systemctl start httpd
@@ -169,7 +197,7 @@ elif [ "$3" = "centos/7" ]; then
     sudo yum install mod_ssl -y
     sudo mkdir /var/www/$1.$2/
     sudo mkdir /var/www/logs/
-    sudo chmod -R 777 /etc/httpd/conf.d
+    sudo chmod -R 777 /etc/httpd/conf.d/
     echo "$VHOST" | sudo tee /etc/httpd/conf.d/000-$1.$2.conf
     echo "$VHOSTSSL" | sudo tee /etc/httpd/conf.d/000-ssl-$1.$2.conf
     echo "$INDEX" | sudo tee /var/www/$1.$2/index.php
@@ -183,7 +211,10 @@ fi
 
 echo -e "\n####### COMPOSER #############################\n"
 if [ "$3" = "ubuntu/bionic64" ]; then
-    echo -e "------- SKIPPED -------"
+    sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    sudo php composer-setup.php
+    sudo php -r "unlink('composer-setup.php');"
+    sudo mv composer.phar /usr/local/bin/composer
 elif [ "$3" = "centos/7" ]; then
     sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     sudo php composer-setup.php
