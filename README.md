@@ -1,5 +1,4 @@
-# Vagrant Web Dev Starter Kit 🦄
-
+# Vagrant Box Builder 📦
 Vagrant can be a bit confusing at first so this Starter Kit will help you create a quick and easy development environment setup for your unique project.
 Supports: Windows, MacOS, Ubuntu
 
