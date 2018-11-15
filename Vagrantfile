@@ -2,8 +2,8 @@ Vagrant.configure("2") do |config|
   config.vm.network "private_network", type: "dhcp"
   config.vm.usable_port_range = 8000..8999
   config.vm.network "forwarded_port", guest: 22, host: 8000, id: 'ssh', auto_correct: true
-  config.vm.network "forwarded_port", guest: 80, host: 8000, id: 'http', auto_correct: true
-  config.vm.network "forwarded_port", guest: 443, host: 8001, id: 'https', auto_correct: true
+  config.vm.network "forwarded_port", guest: 80, host: 8001, id: 'http', auto_correct: true
+  config.vm.network "forwarded_port", guest: 443, host: 8002, id: 'https', auto_correct: true
   config.ssh.insert_key = false
 
   config.vm.define "ubuntu" do |box|
