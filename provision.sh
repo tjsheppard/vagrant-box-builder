@@ -19,6 +19,7 @@ elif [ "$3" = "centos/7" ]; then
     sudo yum install epel-release -y
     sudo yum install figlet -y
     sudo yum install wget -y
+    sudo yum install unzip -y
 else
     echo -e "------- SKIPPED -------"
 fi
@@ -35,7 +36,7 @@ elif [ "$3" = "centos/7" ]; then
     sudo yum install git -y
     if [ "$5" != "" ] || [ "$6" != "" ]; then
         sudo git config --global user.name "$5"
-        sudo git config --global user.email $6
+        sudo git config --global user.email "$6"
     fi
 else
     echo -e "------- SKIPPED -------"
@@ -139,13 +140,13 @@ echo -e "\n####### APACHE #############################\n"
 
 VHOST="<VirtualHost *:80>
     ServerName $1.$2
-    DocumentRoot /var/www/$1.$2
+    DocumentRoot /var/www/$1.$2/public
     ServerAlias $(if [ \"$7\" != \"\" ]; then 
                     echo $7.$1.$2
                 fi)
     ErrorLog /var/www/logs/error.log
     CustomLog /var/www/logs/access.log combined
-    <Directory '/var/www/$1.$2'>
+    <Directory '/var/www/$1.$2/public'>
         Options Indexes FollowSymLinks
         AllowOverride all
         Require all granted
@@ -157,10 +158,10 @@ VHOSTSSL="<VirtualHost *:443>
     ServerAlias $(if [ \"$7\" != \"\" ]; then 
                     echo $7.$1.$2
                 fi)
-    DocumentRoot /var/www/$1.$2
+    DocumentRoot /var/www/$1.$2/public
     ErrorLog /var/www/logs/error-ssl.log
     CustomLog /var/www/logs/access-ssl.log combined
-    <Directory '/var/www/$1.$2'>
+    <Directory '/var/www/$1.$2/public'>
         Options Indexes FollowSymLinks
         AllowOverride all
         Require all granted
@@ -195,12 +196,12 @@ elif [ "$3" = "centos/7" ]; then
     sudo systemctl start httpd
     sudo systemctl enable httpd
     sudo yum install mod_ssl -y
-    sudo mkdir /var/www/$1.$2/
+    sudo mkdir /var/www/$1.$2/public
     sudo mkdir /var/www/logs/
     sudo chmod -R 777 /etc/httpd/conf.d/
     echo "$VHOST" | sudo tee /etc/httpd/conf.d/000-$1.$2.conf
     echo "$VHOSTSSL" | sudo tee /etc/httpd/conf.d/000-ssl-$1.$2.conf
-    echo "$INDEX" | sudo tee /var/www/$1.$2/index.php
+    echo "$INDEX" | sudo tee /var/www/$1.$2/public/index.php
     echo "ServerName $1" | sudo tee /etc/httpd/conf.d/servername.conf
     sudo chmod -R 777 /etc/httpd/conf.d/
     sudo chown root:root /etc/httpd/conf.d/
