@@ -326,6 +326,30 @@ echo -e "\n####### XDEBUG ##############################\n"
         xdebug.remote_port = 9000"
         echo "$XDEBUG" | sudo tee /etc/php.d/xdebug.ini
         sudo chmod -R 777 /etc/php.d/xdebug.ini
+        VCCODE='{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Listen for XDebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9000,
+            "pathMappings": {
+                "/var/www/$1.$2": "${workspaceRoot}/$1/$1.$2",
+                "app" : "${workspaceRoot}/$1/$1.$2",
+            }
+        },
+        {
+            "name": "Launch currently open script",
+            "type": "php",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${fileDirname}",
+            "port": 9000
+        }
+    ]
+}'
+        echo "$VSCODE" | sudo tee /var/www/$1/launch.json
     else
         echo -e "------- SKIPPED -------"
     fi
