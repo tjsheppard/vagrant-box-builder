@@ -318,7 +318,12 @@ echo -e "\n####### XDEBUG ##############################\n"
         sudo pecl install Xdebug
         XDEBUG="[xdebug]
         zend_extension='/usr/lib64/php/modules/xdebug.so'
-        xdebug.remote_enable = 1"
+        xdebug.remote_enable = 1
+        xdebug.remote_autostart = 1
+        xdebug.remote_connect_back = on
+        xdebug.idekey = 'vagrant'
+        xdebug.remote_handler = dbgp
+        xdebug.remote_port = 9000"
         echo "$XDEBUG" | sudo tee /etc/php.d/xdebug.ini
         sudo chmod -R 777 /etc/php.d/xdebug.ini
     else
