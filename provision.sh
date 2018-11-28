@@ -196,6 +196,7 @@ elif [ "$3" = "centos/7" ]; then
     sudo systemctl start httpd
     sudo systemctl enable httpd
     sudo yum install mod_ssl -y
+    sudo mkdir /var/www/$1.$2
     sudo mkdir /var/www/$1.$2/public
     sudo mkdir /var/www/logs/
     sudo chmod -R 777 /etc/httpd/conf.d/
@@ -326,30 +327,25 @@ echo -e "\n####### XDEBUG ##############################\n"
         xdebug.remote_port = 9000"
         echo "$XDEBUG" | sudo tee /etc/php.d/xdebug.ini
         sudo chmod -R 777 /etc/php.d/xdebug.ini
-        VCCODE='{
-    "version": "0.2.0",
-    "configurations": [
+        WORKSPACEROOT="${workspaceRoot}"
+        FILE="${file}"
+        FILEDIRNAME="${fileDirname}"
+        VSCODE="{
+    \"version\": \"0.2.0\",
+    \"configurations\": [
         {
-            "name": "Listen for XDebug",
-            "type": "php",
-            "request": "launch",
-            "port": 9000,
-            "pathMappings": {
-                "/var/www/$1.$2": "${workspaceRoot}/$1/$1.$2",
-                "app" : "${workspaceRoot}/$1/$1.$2",
+            \"name\": \"$1\",
+            \"type\": \"php\",
+            \"request\": \"launch\",
+            \"port\": 9000,
+            \"pathMappings\": {
+                \"/var/www/$1.$2\": \"\${workspaceRoot}/$1/$1.$2\",
+                \"app\" : \"\${workspaceRoot}/$1/$1.$2\",
             }
-        },
-        {
-            "name": "Launch currently open script",
-            "type": "php",
-            "request": "launch",
-            "program": "${file}",
-            "cwd": "${fileDirname}",
-            "port": 9000
         }
     ]
-}'
-        echo "$VSCODE" | sudo tee /var/www/$1/launch.json
+}"
+        echo "$VSCODE" | sudo tee /var/www/launch.json
     else
         echo -e "------- SKIPPED -------"
     fi
