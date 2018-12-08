@@ -42,7 +42,7 @@ gpgkey=http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco'
 
     echo "$GIT" | sudo tee /etc/yum.repos.d/wandisco-git.repo
     sudo rpm --import http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco
-    sudo yum install git
+    sudo yum install git -y
     if [ "$5" != "" ] || [ "$6" != "" ]; then
         sudo git config --global user.name "$5"
         sudo git config --global user.email "$6"
