@@ -13,6 +13,7 @@ if [ "$3" = "ubuntu/bionic64" ]; then
     sudo apt-get install -y wget
 elif [ "$3" = "centos/7" ]; then
     sudo yum update -y
+    sudo yum -y update kernel
     sudo yum install nano -y
     sudo yum install nmap -y
     sudo yum install curl -y
@@ -32,11 +33,20 @@ if [ "$3" = "ubuntu/bionic64" ]; then
     sudo git config --global user.name "$5"
     sudo git config --global user.email $6
 elif [ "$3" = "centos/7" ]; then
-    sudo yum install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm -y
-    sudo yum install git -y
+    GIT='[wandisco-git]
+name=Wandisco GIT Repository
+baseurl=http://opensource.wandisco.com/centos/7/git/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco'
+
+    echo "$GIT" | sudo tee /etc/yum.repos.d/wandisco-git.repo
+    sudo rpm --import http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco
+    sudo yum install git
     if [ "$5" != "" ] || [ "$6" != "" ]; then
         sudo git config --global user.name "$5"
         sudo git config --global user.email "$6"
+        git config --list
     fi
 else
     echo -e "------- SKIPPED -------"
