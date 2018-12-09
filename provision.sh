@@ -105,7 +105,10 @@ elif [ "$3" = "centos/7" ]; then
     sudo yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
     sudo yum install yum-utils -y
 
-    if [ $4 -eq 72 ]; then
+    if [ $4 -eq 73 ]; then
+        sudo yum-config-manager --enable remi-php73
+        sudo yum install php -y
+    elif [ $4 -eq 72 ]; then
         sudo yum-config-manager --enable remi-php72
         sudo yum install php -y
     elif [ $4 -eq 71 ]; then
