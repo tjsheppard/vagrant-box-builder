@@ -44,9 +44,10 @@ gpgkey=http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco'
     sudo rpm --import http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco
     sudo yum install git -y
     if [ "$5" != "" ] || [ "$6" != "" ]; then
-        sudo git config --global user.name "$5"
-        sudo git config --global user.email "$6"
-        git config --list
+        CONFIG="sudo git config --global user.name \"$5\"
+        sudo git config --global user.email $6"
+        echo "$CONFIG" | sudo tee /home/vagrant/.gitconfig
+        echo "$CONFIG" | sudo tee /root/.gitconfig
     fi
 else
     echo -e "------- SKIPPED -------"
