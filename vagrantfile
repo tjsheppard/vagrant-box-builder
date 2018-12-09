@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
     name = "laravel"
     ext = "local"
     os = "centos/7"
-    php = 73
+    php = 72
     gitname = "Tom Sheppard"
     gitemail = "tomsheppard@email.com"
     gituser = "tjsheppard"
