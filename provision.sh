@@ -44,8 +44,10 @@ gpgkey=http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco'
     sudo rpm --import http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco
     sudo yum install git -y
     if [ "$5" != "" ] || [ "$6" != "" ]; then
-        CONFIG="sudo git config --global user.name \"$5\"
-        sudo git config --global user.email $6"
+        CONFIG="[user]
+        name = \"$5\"
+        email = $6
+        username = $7"
         echo "$CONFIG" | sudo tee /home/vagrant/.gitconfig
         echo "$CONFIG" | sudo tee /root/.gitconfig
     fi
@@ -155,8 +157,8 @@ echo -e "\n####### APACHE #############################\n"
 VHOST="<VirtualHost *:80>
     ServerName $1.$2
     DocumentRoot /var/www/$1.$2/public
-    ServerAlias $(if [ \"$7\" != \"\" ]; then 
-                    echo $7.$1.$2
+    ServerAlias $(if [ \"$8\" != \"\" ]; then 
+                    echo $8.$1.$2
                 fi)
     ErrorLog /var/www/logs/error.log
     CustomLog /var/www/logs/access.log combined
@@ -169,8 +171,8 @@ VHOST="<VirtualHost *:80>
 
 VHOSTSSL="<VirtualHost *:443>
     ServerName $1.$2
-    ServerAlias $(if [ \"$7\" != \"\" ]; then 
-                    echo $7.$1.$2
+    ServerAlias $(if [ \"$8\" != \"\" ]; then 
+                    echo $8.$1.$2
                 fi)
     DocumentRoot /var/www/$1.$2/public
     ErrorLog /var/www/logs/error-ssl.log
@@ -307,8 +309,8 @@ subjectAltName = @alt_names
 
 [alt_names]
 DNS.1 = $1.$2
-$(if [ \"$7\" != \"\" ]; then 
-    echo DNS.2 = $7.$1.$2
+$(if [ \"$8\" != \"\" ]; then 
+    echo DNS.2 = $8.$1.$2
 fi)"
 
 echo "$SERVERCSRCNF" | sudo tee server.csr.cnf
@@ -443,8 +445,8 @@ printf \"$reset\"
 echo -e \"$cyan###################################################$reset\n\"
 
 echo -e \"$cyan NAME.................:$reset $black $fCyan $1.$2 $fBlack $reset\"
-if [ \"$7\" != \"\" ]; then 
-    echo -e \"$cyan ALIAS................:$reset $black $fCyan $7.$1.$2 $fBlack $reset\"
+if [ \"$8\" != \"\" ]; then 
+    echo -e \"$cyan ALIAS................:$reset $black $fCyan $8.$1.$2 $fBlack $reset\"
 fi
 echo -e \"$cyan OS...................:$reset $black $fCyan $3 $fBlack $reset\"
 echo -e \"$cyan PHP VERSION..........:$reset $black $fCyan $4 $fBlack $reset\"
